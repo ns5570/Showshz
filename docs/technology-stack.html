@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>ShowSzn — Technology Stack Reference</title>
+<style>
+  @page { margin: 22mm 18mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: #1a1a1a;
+    line-height: 1.55;
+    font-size: 13px;
+  }
+  h1, h2, h3, h4 { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: #0a0a0a; page-break-after: avoid; }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  h2 { font-size: 20px; margin: 30px 0 4px; padding-bottom: 6px; border-bottom: 3px solid #dc2626; }
+  h2 .num { color: #dc2626; margin-right: 6px; }
+  h3 { font-size: 15px; margin: 20px 0 2px; padding-bottom: 3px; border-bottom: 1px solid #ddd; }
+  h3 .num { color: #b91c1c; font-weight: 700; margin-right: 6px; }
+  h4 { font-size: 13px; margin: 12px 0 2px; color: #111; }
+  h4 .num { color: #999; font-weight: 700; margin-right: 4px; }
+  p { margin: 6px 0; }
+  code {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    background: #f3f3f3;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 11.5px;
+  }
+  table { border-collapse: collapse; width: 100%; margin: 8px 0 14px; font-size: 11.5px; page-break-inside: avoid; }
+  th, td { border: 1px solid #ddd; padding: 5px 8px; text-align: left; vertical-align: top; }
+  th { background: #f7f7f7; font-weight: 600; }
+  tr:nth-child(even) td { background: #fbfbfb; }
+
+  .cover {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    page-break-after: always;
+  }
+  .cover .badge {
+    display: inline-block;
+    background: #dc2626;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    width: fit-content;
+    margin-bottom: 20px;
+  }
+  .cover h1 { font-size: 40px; }
+  .cover .subtitle { font-size: 16px; color: #666; margin-top: 6px; }
+  .cover .meta { margin-top: 40px; font-size: 12px; color: #888; }
+  .cover .meta div { margin: 3px 0; }
+
+  .toc { page-break-after: always; }
+  .toc-l1 { font-size: 14px; font-weight: 700; margin: 12px 0 4px; }
+  .toc-l2 { font-size: 12.5px; margin: 3px 0 3px 18px; color: #333; }
+  .toc a { color: #1a1a1a; text-decoration: none; }
+
+  .section { page-break-before: always; }
+  .section:first-of-type { page-break-before: avoid; }
+
+  .tech-card {
+    border: 1px solid #e5e5e5;
+    border-left: 4px solid #dc2626;
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    margin: 10px 0 16px;
+    page-break-inside: avoid;
+    background: #fdfdfd;
+  }
+  .tech-card .version-badge {
+    display: inline-block;
+    background: #111;
+    color: white;
+    font-family: monospace;
+    font-size: 10.5px;
+    padding: 1px 7px;
+    border-radius: 3px;
+    margin-left: 8px;
+  }
+  .tech-card .role {
+    font-size: 11px;
+    color: #b91c1c;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+  .tech-card .desc { margin-top: 6px; font-size: 12px; }
+  .tech-card .why { margin-top: 6px; font-size: 11.5px; color: #444; background: #f7f7f7; padding: 6px 9px; border-radius: 4px; }
+  .tech-card .why strong { color: #111; }
+
+  .hierarchy {
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 10px 0 18px;
+    font-size: 11.5px;
+    line-height: 1.9;
+  }
+  .hierarchy .l1 { font-weight: 700; }
+  .hierarchy .l2 { margin-left: 20px; }
+  .hierarchy .l3 { margin-left: 40px; color: #444; }
+  .hierarchy .tag {
+    display: inline-block;
+    font-size: 9.5px;
+    padding: 0 5px;
+    border-radius: 3px;
+    margin-left: 6px;
+    color: white;
+  }
+  .tag-runtime { background: #2563eb; }
+  .tag-lib { background: #16a34a; }
+  .tag-infra { background: #ea580c; }
+  .tag-service { background: #7c3aed; }
+
+  .footer-note { font-size: 10.5px; color: #999; text-align: center; margin-top: 30px; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <span class="badge">TECHNOLOGY STACK REFERENCE</span>
+  <h1>ShowSzn</h1>
+  <div class="subtitle">Every technology used in this project — versioned, categorized, and explained</div>
+  <div class="meta">
+    <div><strong>Scope:</strong> Backend runtime, frontend runtime, data &amp; caching layer, infrastructure, external services</div>
+    <div><strong>Generated:</strong> August 2026</div>
+    <div><strong>Repository:</strong> ~/projects/showszn</div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <h2 style="border:none; margin-top:0;">Contents</h2>
+
+  <div class="toc-l1"><a href="#hierarchy">1. Full Stack Hierarchy (at a glance)</a></div>
+
+  <div class="toc-l1"><a href="#backend">2. Backend</a></div>
+  <div class="toc-l2">2.1 Language &amp; Runtime — Java</div>
+  <div class="toc-l2">2.2 Application Framework — Spring Boot &amp; Spring Framework</div>
+  <div class="toc-l2">2.3 Web Layer — Spring MVC &amp; Embedded Tomcat</div>
+  <div class="toc-l2">2.4 Data Layer — JPA, Hibernate, MySQL, HikariCP, Flyway</div>
+  <div class="toc-l2">2.5 Caching &amp; Concurrency — Redis, Spring Data Redis, Spring Cache</div>
+  <div class="toc-l2">2.6 Security &amp; Authentication — Spring Security, OAuth2, Clerk</div>
+  <div class="toc-l2">2.7 Serialization — Jackson 3</div>
+  <div class="toc-l2">2.8 Validation — Jakarta Bean Validation</div>
+  <div class="toc-l2">2.9 Developer Tooling — Lombok, Maven</div>
+
+  <div class="toc-l1"><a href="#frontend">3. Frontend</a></div>
+  <div class="toc-l2">3.1 Language — TypeScript</div>
+  <div class="toc-l2">3.2 UI Library — React</div>
+  <div class="toc-l2">3.3 Build Tooling — Vite</div>
+  <div class="toc-l2">3.4 Routing — React Router</div>
+  <div class="toc-l2">3.5 Server State — TanStack Query</div>
+  <div class="toc-l2">3.6 HTTP Client — Axios</div>
+  <div class="toc-l2">3.7 Styling — Tailwind CSS</div>
+  <div class="toc-l2">3.8 Authentication SDK — Clerk React</div>
+  <div class="toc-l2">3.9 Linting — oxlint</div>
+
+  <div class="toc-l1"><a href="#infra">4. Infrastructure</a></div>
+  <div class="toc-l2">4.1 Containerization — Docker &amp; Docker Compose</div>
+  <div class="toc-l2">4.2 Database Container</div>
+  <div class="toc-l2">4.3 Cache Container</div>
+
+  <div class="toc-l1"><a href="#services">5. External Services</a></div>
+  <div class="toc-l2">5.1 Clerk (Authentication-as-a-Service)</div>
+  <div class="toc-l2">5.2 YouTube (oEmbed &amp; iframe embeds)</div>
+  <div class="toc-l2">5.3 Stripe (planned, not yet integrated)</div>
+
+  <div class="toc-l1"><a href="#patterns">6. Architectural Patterns Employed</a></div>
+</div>
+
+<!-- 1. HIERARCHY -->
+<div class="section" id="hierarchy">
+<h2><span class="num">1.</span>Full Stack Hierarchy</h2>
+<p>A single-glance map of every layer, before the detailed sections below.</p>
+
+<div class="hierarchy">
+<div class="l1">ShowSzn</div>
+
+<div class="l2">├─ Backend <span class="tag tag-runtime">JVM</span></div>
+<div class="l3">├─ Java 21 (language + runtime)</div>
+<div class="l3">├─ Spring Boot 4.1.0 (application framework)</div>
+<div class="l3">│&nbsp;&nbsp;├─ Spring Framework 7.0.8 (core / MVC)</div>
+<div class="l3">│&nbsp;&nbsp;├─ Spring Data JPA 4.1.0 → Hibernate ORM 7.4.1</div>
+<div class="l3">│&nbsp;&nbsp;├─ Spring Data Redis 4.1.0</div>
+<div class="l3">│&nbsp;&nbsp;├─ Spring Security 7.1.0 (OAuth2 Resource Server)</div>
+<div class="l3">│&nbsp;&nbsp;├─ Spring Cache (abstraction over Redis)</div>
+<div class="l3">│&nbsp;&nbsp;└─ Spring Validation (Jakarta Bean Validation)</div>
+<div class="l3">├─ Embedded Tomcat 11.0.22 (servlet container)</div>
+<div class="l3">├─ HikariCP 7.0.2 (JDBC connection pool)</div>
+<div class="l3">├─ MySQL Connector/J 9.7.0 (JDBC driver)</div>
+<div class="l3">├─ Flyway 12.4.0 (schema migrations)</div>
+<div class="l3">├─ Jackson 3.1.4 — <code>tools.jackson</code> (JSON serialization)</div>
+<div class="l3">├─ Lombok 1.18.46 (boilerplate codegen)</div>
+<div class="l3">└─ Maven (build tool, via <code>mvnw</code> wrapper)</div>
+
+<div class="l2">├─ Frontend <span class="tag tag-runtime">Browser / Node</span></div>
+<div class="l3">├─ TypeScript 6.0.3 (language)</div>
+<div class="l3">├─ React 19.2.8 (UI library)</div>
+<div class="l3">├─ Vite 8.2.1 (build tool + dev server)</div>
+<div class="l3">│&nbsp;&nbsp;└─ @vitejs/plugin-react 6.0.5</div>
+<div class="l3">├─ React Router 7.18.2 (client-side routing)</div>
+<div class="l3">├─ TanStack Query 5.101.4 (server state / caching)</div>
+<div class="l3">├─ Axios 1.19.0 (HTTP client)</div>
+<div class="l3">├─ Tailwind CSS 4.3.3 (utility-first styling)</div>
+<div class="l3">├─ @clerk/clerk-react 5.61.9 (auth SDK)</div>
+<div class="l3">└─ oxlint 1.77.0 (linter)</div>
+
+<div class="l2">├─ Data &amp; Cache <span class="tag tag-infra">Docker</span></div>
+<div class="l3">├─ MySQL 8.4.11 (primary datastore)</div>
+<div class="l3">└─ Redis 7.4.10 (cache + distributed seat-lock)</div>
+
+<div class="l2">└─ External Services <span class="tag tag-service">SaaS</span></div>
+<div class="l3">├─ Clerk (hosted authentication)</div>
+<div class="l3">├─ YouTube (trailer embeds via oEmbed + iframe)</div>
+<div class="l3">└─ Stripe (payments — planned, not yet wired)</div>
+</div>
+</div>
+
+<!-- 2. BACKEND -->
+<div class="section" id="backend">
+<h2><span class="num">2.</span>Backend</h2>
+
+<h3><span class="num">2.1</span>Language &amp; Runtime</h3>
+<div class="tech-card">
+  <strong>Java</strong><span class="version-badge">21.0.10 (OpenJDK)</span>
+  <div class="role">Language / Runtime</div>
+  <div class="desc">The programming language and JVM the entire backend runs on. Java 21 is a Long-Term Support (LTS) release.</div>
+  <div class="why"><strong>Why here:</strong> LTS stability plus access to modern language features used throughout the codebase — records (all DTOs are Java <code>record</code> types), pattern matching in <code>switch</code> expressions (seat-type price multipliers), and virtual-thread-ready tooling. Spring Boot 4 requires Java 17+; 21 was chosen as the current LTS.</div>
+</div>
+
+<h3><span class="num">2.2</span>Application Framework</h3>
+<div class="tech-card">
+  <strong>Spring Boot</strong><span class="version-badge">4.1.0</span>
+  <div class="role">Application Framework</div>
+  <div class="desc">Opinionated auto-configuration layer over the Spring Framework. Handles dependency injection wiring, embedded server startup, externalized configuration (<code>application.yml</code>), and auto-configures every starter below based on what's on the classpath.</div>
+  <div class="why"><strong>Why here:</strong> Convention-over-configuration meant each new domain (catalog → booking → events) could be added as a self-contained package with almost no manual wiring — a new <code>@Service</code>/<code>@RestController</code>/<code>@Repository</code> just works once on the classpath.</div>
+</div>
+<div class="tech-card">
+  <strong>Spring Framework (Core, Context, MVC)</strong><span class="version-badge">7.0.8</span>
+  <div class="role">Underlying Framework</div>
+  <div class="desc">The IoC container and web MVC framework that Spring Boot builds on top of. Provides <code>@Component</code>/<code>@Service</code>/<code>@RestController</code> stereotypes, the <code>DispatcherServlet</code> request-handling pipeline, and constructor-based dependency injection used throughout every service class in this project.</div>
+</div>
+
+<h3><span class="num">2.3</span>Web Layer</h3>
+<div class="tech-card">
+  <strong>Spring Web MVC</strong> <em>(spring-boot-starter-webmvc)</em>
+  <div class="role">REST API Layer</div>
+  <div class="desc">Provides <code>@RestController</code>, request/response body JSON binding, path/query parameter binding (<code>@PathVariable</code>, <code>@RequestParam</code>), and the <code>Pageable</code>/<code>Page&lt;T&gt;</code> abstraction used by every admin list endpoint.</div>
+</div>
+<div class="tech-card">
+  <strong>Apache Tomcat (embedded)</strong><span class="version-badge">11.0.22</span>
+  <div class="role">Servlet Container</div>
+  <div class="desc">The HTTP server embedded inside the Spring Boot application itself — no separate application server deployment needed. Listens on port 8080 in local development.</div>
+</div>
+
+<h3><span class="num">2.4</span>Data Layer</h3>
+<div class="tech-card">
+  <strong>Spring Data JPA</strong><span class="version-badge">4.1.0</span>
+  <div class="role">Persistence Abstraction</div>
+  <div class="desc">Repository-pattern abstraction over JPA. Every entity in this project (<code>Movie</code>, <code>Show</code>, <code>Booking</code>, <code>Event</code>, etc.) has a corresponding <code>JpaRepository</code> interface — Spring generates the implementation at runtime, including derived query methods (e.g. <code>findBySlug</code>) and custom <code>@Query</code> JPQL for join-fetch queries.</div>
+  <div class="why"><strong>Why here:</strong> Every "lazy-loading masked as 401" bug documented in this project's build log was fixed using this layer's <code>join fetch</code> JPQL syntax — the single most-used feature of this dependency in practice.</div>
+</div>
+<div class="tech-card">
+  <strong>Hibernate ORM</strong><span class="version-badge">7.4.1.Final</span>
+  <div class="role">JPA Implementation</div>
+  <div class="desc">The actual ORM engine behind Spring Data JPA — translates entity operations into SQL, manages the persistence context (first-level cache), and enforces the entity-to-table mapping declared via <code>@Entity</code>/<code>@Table</code>/<code>@Column</code> annotations. Configured with <code>ddl-auto: validate</code>, meaning Hibernate never generates schema itself — it only verifies that every entity matches what Flyway already created.</div>
+</div>
+<div class="tech-card">
+  <strong>MySQL</strong><span class="version-badge">8.4.11</span>
+  <div class="role">Primary Database (Relational)</div>
+  <div class="desc">The system of record for every table: catalog (city/venue/screen/seat/movie/show), users, bookings, and events. Runs in Docker locally. Migrated onto mid-project from PostgreSQL.</div>
+  <div class="why"><strong>Why here:</strong> Explicit user request to migrate off Postgres. Required rewriting all schema/seed SQL — <code>BIGSERIAL</code> → <code>AUTO_INCREMENT</code>, <code>generate_series()</code> → <code>WITH RECURSIVE</code> CTEs, and renaming the reserved word <code>show</code> to <code>showtime</code>.</div>
+</div>
+<div class="tech-card">
+  <strong>MySQL Connector/J</strong><span class="version-badge">9.7.0</span>
+  <div class="role">JDBC Driver</div>
+  <div class="desc">The JDBC driver that lets the JVM talk to MySQL. Connection URL is configured with <code>serverTimezone=UTC</code> so that <code>DATETIME</code> columns round-trip consistently with Java's <code>Instant</code> type.</div>
+</div>
+<div class="tech-card">
+  <strong>HikariCP</strong><span class="version-badge">7.0.2</span>
+  <div class="role">Connection Pool</div>
+  <div class="desc">Spring Boot's default JDBC connection pool — pre-allocates and reuses database connections rather than opening a new TCP connection per request.</div>
+</div>
+<div class="tech-card">
+  <strong>Flyway</strong><span class="version-badge">12.4.0 (flyway-mysql)</span>
+  <div class="role">Schema Migration Tool</div>
+  <div class="desc">Version-controlled SQL migrations, run automatically on application startup. Every schema change and every batch of seed data in this project is a numbered file under <code>src/main/resources/db/migration/</code> (<code>V1</code> through <code>V7</code> at last count) — nothing is ever hand-run against the database outside of this mechanism.</div>
+  <div class="why"><strong>Why here:</strong> Guarantees the schema is reproducible from a clean database in seconds (verified: ~2.25 seconds for the full catalog + ~255K seed rows) and that every environment (a fresh clone of this repo) ends up with an identical schema.</div>
+</div>
+
+<h3><span class="num">2.5</span>Caching &amp; Concurrency</h3>
+<div class="tech-card">
+  <strong>Redis</strong><span class="version-badge">7.4.10</span>
+  <div class="role">In-Memory Store — Cache <em>and</em> Distributed Lock</div>
+  <div class="desc">Used for two distinct purposes in this project: (1) HTTP response caching for hot public reads (city list, movies-by-city, events-by-city), and (2) the seat-hold mechanism for booking — <code>SETNX</code> with a 5-minute TTL guarantees two users can never hold the same seat simultaneously, and expired holds clean themselves up with no background job required.</div>
+</div>
+<div class="tech-card">
+  <strong>Spring Data Redis</strong><span class="version-badge">4.1.0</span>
+  <div class="role">Redis Client Abstraction</div>
+  <div class="desc">Provides <code>StringRedisTemplate</code> (used directly by <code>SeatLockService</code> for atomic hold acquisition) and the <code>RedisCacheManager</code> that backs the <code>@Cacheable</code> annotations.</div>
+</div>
+<div class="tech-card">
+  <strong>Spring Cache Abstraction</strong> <em>(spring-boot-starter-cache)</em>
+  <div class="role">Declarative Caching</div>
+  <div class="desc"><code>@Cacheable</code> / <code>@CacheEvict</code> annotations on service methods (e.g. <code>CatalogService.listCities()</code>). A custom <code>CacheConfig</code> registers a per-cache-name, explicitly-typed <code>JacksonJsonRedisSerializer</code> for each cache — necessary because the default generic serializer loses <code>List&lt;T&gt;</code> element type information on deserialize (documented as a real bug found and fixed in this project).</div>
+</div>
+
+<h3><span class="num">2.6</span>Security &amp; Authentication</h3>
+<div class="tech-card">
+  <strong>Spring Security</strong><span class="version-badge">7.1.0</span>
+  <div class="role">Authorization &amp; Route Protection</div>
+  <div class="desc">Configures three tiers of route access: <code>/api/public/**</code> (open), <code>/api/admin/**</code> (requires <code>ROLE_ADMIN</code>), everything else (requires any authenticated user). A custom <code>ClerkJwtAuthenticationConverter</code> enriches the authenticated principal with <code>ROLE_ADMIN</code> by looking up the requesting user in the database on every request.</div>
+</div>
+<div class="tech-card">
+  <strong>Spring Security OAuth2 Resource Server</strong>
+  <div class="role">JWT Validation</div>
+  <div class="desc">Validates every incoming JWT against Clerk's published JWKS (fetched from <code>{CLERK_ISSUER}/.well-known/openid-configuration</code>), lazily and cached — this project never issues its own tokens, it only verifies tokens Clerk already issued.</div>
+</div>
+<div class="tech-card">
+  <strong>Clerk</strong>
+  <div class="role">External Authentication Provider</div>
+  <div class="desc">See §5.1 for full detail — included here because it is structurally part of the backend's security configuration (the JWT issuer) as well as a standalone external service.</div>
+</div>
+
+<h3><span class="num">2.7</span>Serialization</h3>
+<div class="tech-card">
+  <strong>Jackson</strong><span class="version-badge">3.1.4 — <code>tools.jackson</code></span>
+  <div class="role">JSON Serialization</div>
+  <div class="desc">Converts Java objects (DTO records) to/from JSON for every REST response and for the Redis-cached values. This is <strong>Jackson 3</strong>, not the more commonly-known Jackson 2 — the Maven coordinates moved from <code>com.fasterxml.jackson.*</code> to <code>tools.jackson.*</code>, which meant the classic Spring Data Redis serializer (<code>GenericJackson2JsonRedisSerializer</code>) doesn't exist on this classpath at all; the project uses its Jackson-3-compatible replacement, <code>GenericJacksonJsonRedisSerializer</code> (no "2"), instead.</div>
+</div>
+
+<h3><span class="num">2.8</span>Validation</h3>
+<div class="tech-card">
+  <strong>Jakarta Bean Validation</strong> <em>(spring-boot-starter-validation)</em>
+  <div class="role">Request Validation</div>
+  <div class="desc"><code>@NotBlank</code>, <code>@NotNull</code>, <code>@Positive</code>, <code>@NotEmpty</code> annotations on every admin request DTO (<code>MovieRequest</code>, <code>EventRequest</code>, <code>HoldRequest</code>, etc.), enforced automatically via <code>@Valid</code> on controller method parameters.</div>
+</div>
+
+<h3><span class="num">2.9</span>Developer Tooling</h3>
+<div class="tech-card">
+  <strong>Lombok</strong><span class="version-badge">1.18.46</span>
+  <div class="role">Boilerplate Code Generation</div>
+  <div class="desc">Compile-time annotation processor. Every JPA entity in this project uses <code>@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder</code> instead of hand-written accessors — required because JPA entities need a no-args constructor, but the rest of the codebase wants to construct them via a fluent builder.</div>
+</div>
+<div class="tech-card">
+  <strong>Maven</strong> <em>(via the <code>mvnw</code> wrapper)</em>
+  <div class="role">Build Tool</div>
+  <div class="desc">Dependency resolution and build lifecycle. The wrapper script (<code>mvnw</code>) is committed to the repo so the exact Maven version is pinned — no separate Maven installation is required on a new machine.</div>
+</div>
+</div>
+
+<!-- 3. FRONTEND -->
+<div class="section" id="frontend">
+<h2><span class="num">3.</span>Frontend</h2>
+
+<h3><span class="num">3.1</span>Language</h3>
+<div class="tech-card">
+  <strong>TypeScript</strong><span class="version-badge">6.0.3</span>
+  <div class="role">Language</div>
+  <div class="desc">A typed superset of JavaScript. Every API response shape in this project has a corresponding interface in <code>types.ts</code> (e.g. <code>MovieDetail</code>, <code>ShowSeatMap</code>, <code>BookingResponse</code>), which is what caught several would-be runtime bugs at compile time during development (stale field names after backend schema changes, for instance).</div>
+</div>
+
+<h3><span class="num">3.2</span>UI Library</h3>
+<div class="tech-card">
+  <strong>React</strong><span class="version-badge">19.2.8</span>
+  <div class="role">UI Library</div>
+  <div class="desc">Component-based UI rendering. Every page (<code>HomePage</code>, <code>SeatSelectionPage</code>, admin pages, etc.) is a function component using hooks (<code>useState</code>, <code>useMemo</code>, <code>useEffect</code>) — no class components anywhere in the codebase.</div>
+</div>
+
+<h3><span class="num">3.3</span>Build Tooling</h3>
+<div class="tech-card">
+  <strong>Vite</strong><span class="version-badge">8.2.1</span>
+  <div class="role">Build Tool &amp; Dev Server</div>
+  <div class="desc">Provides the dev server (with hot module replacement — most edits in this project reflected in the browser in under a second without a manual refresh) and the production build. Configured with a proxy that forwards <code>/api/*</code> requests to the backend on <code>:8080</code>, so the frontend dev server and backend can be developed against each other with no CORS configuration needed in dev.</div>
+</div>
+<div class="tech-card">
+  <strong>@vitejs/plugin-react</strong><span class="version-badge">6.0.5</span>
+  <div class="role">Vite Plugin</div>
+  <div class="desc">Enables JSX/TSX compilation and React Fast Refresh inside Vite.</div>
+</div>
+
+<h3><span class="num">3.4</span>Routing</h3>
+<div class="tech-card">
+  <strong>React Router</strong><span class="version-badge">7.18.2</span>
+  <div class="role">Client-Side Routing</div>
+  <div class="desc">Declarative route definitions in <code>App.tsx</code> covering public pages, seat-selection/booking pages, and a nested <code>/admin/*</code> route tree with its own layout (<code>AdminLayout</code>) and shared access-gating.</div>
+</div>
+
+<h3><span class="num">3.5</span>Server State Management</h3>
+<div class="tech-card">
+  <strong>TanStack Query</strong><span class="version-badge">5.101.4</span>
+  <div class="role">Server State / Data Fetching</div>
+  <div class="desc">Every piece of data that comes from the backend is fetched and cached via a <code>useQuery</code> hook, organized into domain-specific hook files (<code>queries.ts</code>, <code>eventQueries.ts</code>, <code>bookingQueries.ts</code>, <code>adminQueries.ts</code>). Mutations (<code>useMutation</code>) invalidate the relevant query keys on success rather than manually patching client-side cache.</div>
+  <div class="why"><strong>Why here:</strong> Eliminates hand-written loading/error/cache state for every fetch — every page in this project gets loading skeletons and error states for free from the same hook that fetches the data.</div>
+</div>
+
+<h3><span class="num">3.6</span>HTTP Client</h3>
+<div class="tech-card">
+  <strong>Axios</strong><span class="version-badge">1.19.0</span>
+  <div class="role">HTTP Client</div>
+  <div class="desc">A single shared instance (<code>lib/api.ts</code>) with base URL <code>/api</code>. A request interceptor (<code>useAuthTokenInjector</code>) attaches the current Clerk session JWT as a Bearer token to every outgoing request.</div>
+</div>
+
+<h3><span class="num">3.7</span>Styling</h3>
+<div class="tech-card">
+  <strong>Tailwind CSS</strong><span class="version-badge">4.3.3</span>
+  <div class="role">Utility-First CSS Framework</div>
+  <div class="desc">All styling in this project is done via utility classes directly in JSX — there is no separate CSS-in-JS or component stylesheet system. Custom keyframe animations (fade-in, scale-in) are defined once in <code>index.css</code> and reused as utility classes across the app.</div>
+</div>
+
+<h3><span class="num">3.8</span>Authentication SDK</h3>
+<div class="tech-card">
+  <strong>@clerk/clerk-react</strong><span class="version-badge">5.61.9</span>
+  <div class="role">Auth UI Components + Session Management</div>
+  <div class="desc">Provides <code>&lt;ClerkProvider&gt;</code>, <code>&lt;SignInButton&gt;</code>, <code>&lt;SignedIn&gt;</code>/<code>&lt;SignedOut&gt;</code> conditional rendering, <code>&lt;UserButton&gt;</code>, and the <code>useAuth()</code>/<code>getToken()</code> hooks used to retrieve the session JWT for API calls.</div>
+</div>
+
+<h3><span class="num">3.9</span>Linting</h3>
+<div class="tech-card">
+  <strong>oxlint</strong><span class="version-badge">1.77.0</span>
+  <div class="role">Linter</div>
+  <div class="desc">A Rust-based JavaScript/TypeScript linter, configured as the project's <code>npm run lint</code> script. Chosen over ESLint primarily for startup/run speed.</div>
+</div>
+</div>
+
+<!-- 4. INFRASTRUCTURE -->
+<div class="section" id="infra">
+<h2><span class="num">4.</span>Infrastructure</h2>
+
+<h3><span class="num">4.1</span>Containerization</h3>
+<div class="tech-card">
+  <strong>Docker &amp; Docker Compose</strong>
+  <div class="role">Local Infrastructure</div>
+  <div class="desc"><code>docker-compose.yml</code> at the repo root defines two services — MySQL and Redis — so the entire data layer for local development starts with a single <code>docker compose up -d</code>. Neither the application backend nor frontend are containerized in this project; both run directly via <code>mvnw</code> / <code>npm run dev</code>.</div>
+</div>
+
+<h3><span class="num">4.2</span>Database Container</h3>
+<div class="tech-card">
+  <strong>mysql:8.4</strong> (Docker image)
+  <div class="role">Containerized MySQL</div>
+  <div class="desc">Runs on port 3306, persisted to a named Docker volume (<code>showszn-mysql-data</code>) so data survives container restarts. Healthcheck via <code>mysqladmin ping</code>.</div>
+</div>
+
+<h3><span class="num">4.3</span>Cache Container</h3>
+<div class="tech-card">
+  <strong>redis:7-alpine</strong> (Docker image)
+  <div class="role">Containerized Redis</div>
+  <div class="desc">Runs on port 6379. Alpine-based image for a smaller footprint. No persistence volume configured — acceptable because everything stored in Redis in this project (cache entries, seat holds) is either short-lived (5-minute TTL) or safely re-derivable from MySQL on a cache miss.</div>
+</div>
+</div>
+
+<!-- 5. EXTERNAL SERVICES -->
+<div class="section" id="services">
+<h2><span class="num">5.</span>External Services</h2>
+
+<h3><span class="num">5.1</span>Clerk</h3>
+<div class="tech-card">
+  <strong>Clerk</strong>
+  <div class="role">Authentication-as-a-Service</div>
+  <div class="desc">Hosted sign-up/sign-in, session management, and JWT issuance. This project never stores a password or implements its own auth flow — the frontend embeds Clerk's hosted UI components, and the backend only verifies tokens Clerk already issued (see §2.6). A custom session-token template is configured in the Clerk dashboard to include <code>email</code> and <code>name</code> claims, since Clerk's default token omits them.</div>
+</div>
+
+<h3><span class="num">5.2</span>YouTube</h3>
+<div class="tech-card">
+  <strong>YouTube (oEmbed API + iframe embeds)</strong>
+  <div class="role">Trailer Content Delivery</div>
+  <div class="desc">Movie trailers are real, openly-licensed short films (Blender Foundation / Blender Studio open movies), embedded via <code>youtube-nocookie.com/embed/{videoId}</code> iframes in a modal. Each video ID was verified via YouTube's oEmbed endpoint (<code>youtube.com/oembed?url=...</code>) before use, confirming title, channel, and embeddability.</div>
+</div>
+
+<h3><span class="num">5.3</span>Stripe <em>(planned)</em></h3>
+<div class="tech-card">
+  <strong>Stripe</strong>
+  <div class="role">Payments — Not Yet Integrated</div>
+  <div class="desc">Environment variable placeholders (<code>STRIPE_SECRET_KEY</code>, <code>STRIPE_WEBHOOK_SECRET</code>) exist in <code>backend/.env.example</code>, but no Stripe SDK dependency has been added and no payment code exists yet. Booking confirmation currently finalizes immediately with no real charge (a mock-payment step) — see the separate technical documentation's "Known Limitations" section for the intended real-Stripe integration design (webhook-driven confirmation, not client-driven).</div>
+</div>
+</div>
+
+<!-- 6. PATTERNS -->
+<div class="section" id="patterns">
+<h2><span class="num">6.</span>Architectural Patterns Employed</h2>
+<p>Not technologies in themselves, but recurring design patterns built on top of the technologies above — included here because they explain <em>how</em> several of the libraries above are actually used together.</p>
+
+<table>
+<tr><th>Pattern</th><th>Where it's used</th></tr>
+<tr><td>Layered architecture (Controller → Service → Repository)</td><td>Every domain package: <code>catalog</code>, <code>booking</code>, <code>event</code>, <code>eventbooking</code>, <code>admin</code></td></tr>
+<tr><td>Repository pattern</td><td>Every <code>*Repository</code> interface extending Spring Data's <code>JpaRepository</code></td></tr>
+<tr><td>DTO pattern (never expose entities directly)</td><td>Every controller returns a <code>record</code> DTO (e.g. <code>MovieSummaryResponse</code>), mapped from the JPA entity in a <code>from()</code> static factory method</td></tr>
+<tr><td>Cache-aside</td><td><code>@Cacheable</code> on <code>CatalogService</code>/<code>EventCatalogService</code> read methods, <code>@CacheEvict</code> on the admin mutations that could stale them</td></tr>
+<tr><td>Distributed lock (Redis <code>SETNX</code>)</td><td><code>SeatLockService</code> — the core correctness mechanism preventing double-booked seats</td></tr>
+<tr><td>Namespaced key isolation</td><td><code>SeatLockService</code> prefixes Redis keys with <code>movie:</code> / <code>event:</code> so two independent auto-increment ID sequences can never collide</td></tr>
+<tr><td>JWT Bearer authentication (stateless)</td><td>Every authenticated API request; no server-side session state anywhere in the backend</td></tr>
+<tr><td>Versioned database migrations</td><td>Every schema/seed change as a numbered Flyway file — never a manual ad-hoc SQL change</td></tr>
+<tr><td>Shared presentational components over duplication</td><td><code>SeatGrid</code> and <code>BookingConfirmedCard</code> components reused identically by both the movie and event booking flows</td></tr>
+</table>
+</div>
+
+<div class="footer-note">ShowSzn Technology Stack Reference — reflects the dependency versions actually resolved in this project at time of writing.</div>
+
+</body>
+</html>

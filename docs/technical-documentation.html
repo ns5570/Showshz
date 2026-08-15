@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>ShowSzn — Technical Documentation</title>
+<style>
+  @page { margin: 22mm 18mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: #1a1a1a;
+    line-height: 1.55;
+    font-size: 13px;
+    max-width: 100%;
+  }
+  h1, h2, h3, h4 { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: #0a0a0a; page-break-after: avoid; }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  h2 { font-size: 19px; margin: 32px 0 10px; padding-bottom: 6px; border-bottom: 2px solid #dc2626; }
+  h3 { font-size: 15px; margin: 20px 0 8px; color: #dc2626; }
+  h4 { font-size: 13px; margin: 14px 0 6px; }
+  p { margin: 8px 0; }
+  code {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    background: #f3f3f3;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+  }
+  pre {
+    background: #1e1e1e;
+    color: #e8e8e8;
+    padding: 12px 14px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 11.5px;
+    line-height: 1.5;
+    page-break-inside: avoid;
+  }
+  pre code { background: none; padding: 0; color: inherit; }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0 16px; font-size: 12px; page-break-inside: avoid; }
+  th, td { border: 1px solid #ddd; padding: 6px 9px; text-align: left; vertical-align: top; }
+  th { background: #f7f7f7; font-weight: 600; }
+  tr:nth-child(even) td { background: #fbfbfb; }
+  .cover {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    page-break-after: always;
+  }
+  .cover .badge {
+    display: inline-block;
+    background: #dc2626;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    width: fit-content;
+    margin-bottom: 20px;
+  }
+  .cover h1 { font-size: 42px; }
+  .cover .subtitle { font-size: 16px; color: #666; margin-top: 6px; }
+  .cover .meta { margin-top: 40px; font-size: 12px; color: #888; }
+  .cover .meta div { margin: 3px 0; }
+  .toc { page-break-after: always; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin: 6px 0; font-size: 13px; }
+  .toc a { color: #1a1a1a; text-decoration: none; }
+  .note {
+    background: #fff7ed;
+    border-left: 4px solid #ea580c;
+    padding: 8px 14px;
+    margin: 10px 0;
+    font-size: 12.5px;
+    border-radius: 0 4px 4px 0;
+  }
+  .fixed {
+    background: #f0fdf4;
+    border-left: 4px solid #16a34a;
+    padding: 8px 14px;
+    margin: 10px 0;
+    font-size: 12.5px;
+    border-radius: 0 4px 4px 0;
+  }
+  .limitation {
+    background: #fef2f2;
+    border-left: 4px solid #dc2626;
+    padding: 8px 14px;
+    margin: 10px 0;
+    font-size: 12.5px;
+    border-radius: 0 4px 4px 0;
+  }
+  .section { page-break-before: always; }
+  .section:first-of-type { page-break-before: avoid; }
+  .badge-method {
+    display: inline-block;
+    font-family: monospace;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: white;
+    min-width: 42px;
+    text-align: center;
+  }
+  .get { background: #2563eb; }
+  .post { background: #16a34a; }
+  .put { background: #ea580c; }
+  .delete { background: #dc2626; }
+  .diagram {
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+    padding: 16px;
+    margin: 12px 0;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 6px 0;
+    font-size: 12px;
+  }
+  .flow-num {
+    background: #dc2626;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .footer-note { font-size: 10.5px; color: #999; text-align: center; margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <span class="badge">TECHNICAL DOCUMENTATION</span>
+  <h1>ShowSzn</h1>
+  <div class="subtitle">A BookMyShow-style ticket booking platform — architecture, data flow, and build log</div>
+  <div class="meta">
+    <div><strong>Stack:</strong> Spring Boot 4 (Java 21) · MySQL 8.4 · Redis 7 · React 19 · TypeScript · Clerk</div>
+    <div><strong>Generated:</strong> August 2026</div>
+    <div><strong>Repository:</strong> ~/projects/showszn</div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#overview">Project Overview</a></li>
+    <li><a href="#repo-structure">Repository Structure</a></li>
+    <li><a href="#schema">Database Schema</a></li>
+    <li><a href="#auth-flow">Authentication &amp; Authorization Flow</a></li>
+    <li><a href="#booking-flow">Booking &amp; Seat-Locking Flow</a></li>
+    <li><a href="#caching">Caching Strategy</a></li>
+    <li><a href="#api-reference">API Reference</a></li>
+    <li><a href="#frontend-flow">Frontend Data Flow</a></li>
+    <li><a href="#changelog">Build Log: Decisions &amp; Bugs Fixed</a></li>
+    <li><a href="#setup">Environment &amp; Setup</a></li>
+    <li><a href="#limitations">Known Limitations &amp; Next Steps</a></li>
+  </ol>
+</div>
+
+<!-- 1. OVERVIEW -->
+<div class="section" id="overview">
+<h2>1. Project Overview</h2>
+<p>ShowSzn is a full-stack movie ticket booking platform modeled on BookMyShow: browse movies by city, view showtimes across multiple cinema chains, pick seats on a real seat map, and book with a live (Redis-backed) seat-locking flow. It also has a lightweight Events section and an admin panel for managing the catalog.</p>
+
+<table>
+<tr><th>Layer</th><th>Technology</th><th>Notes</th></tr>
+<tr><td>Backend</td><td>Spring Boot 4.1.0, Java 21</td><td>Built with Spring Data JPA, Spring Security (OAuth2 resource server), Spring Cache</td></tr>
+<tr><td>Database</td><td>MySQL 8.4</td><td>Migrated from PostgreSQL mid-project; schema managed by Flyway</td></tr>
+<tr><td>Cache / Locking</td><td>Redis 7</td><td>Used for both HTTP response caching and seat-hold locks (SETNX pattern)</td></tr>
+<tr><td>Auth</td><td>Clerk</td><td>Frontend hosted sign-in; backend verifies JWTs against Clerk's JWKS endpoint</td></tr>
+<tr><td>Frontend</td><td>React 19 + TypeScript + Vite</td><td>TanStack Query for server state, React Router for navigation, Tailwind CSS 4 for styling</td></tr>
+<tr><td>Infra (local)</td><td>Docker Compose</td><td>Runs MySQL + Redis; app runs via <code>mvnw spring-boot:run</code> / <code>npm run dev</code></td></tr>
+</table>
+
+<p>The build order across the project was: scaffolding → data model → auth → browse (movies/shows) → admin panel → geolocation + trailers + UI polish → scalability (pagination, caching, more cities) → MySQL migration + realistic multi-mall venues + corrected movie/trailer catalog → full booking &amp; seat-selection flow → site structure (logo, search, footer, category nav, events, banners).</p>
+</div>
+
+<!-- 2. REPO STRUCTURE -->
+<div class="section" id="repo-structure">
+<h2>2. Repository Structure</h2>
+<pre><code>showszn/
+├── docker-compose.yml       # MySQL + Redis for local dev
+├── backend/
+│   ├── pom.xml
+│   └── src/main/
+│       ├── java/com/showszn/backend/
+│       │   ├── catalog/     # City, Venue, Screen, Seat, Movie, Show, ShowSeat
+│       │   ├── user/        # AppUser, sync from Clerk JWT
+│       │   ├── security/    # JWT verification + ROLE_ADMIN converter
+│       │   ├── admin/       # Admin CRUD APIs (movies/venues/screens/shows)
+│       │   ├── booking/     # Booking, seat locking, hold/confirm flow
+│       │   ├── event/       # Lightweight curated events
+│       │   ├── cache/       # Redis cache serializer config
+│       │   └── common/      # Health check
+│       └── resources/
+│           ├── application.yml
+│           └── db/migration/   # Flyway SQL migrations (V1–V5)
+└── frontend/
+    └── src/
+        ├── pages/            # Route-level components
+        ├── pages/admin/       # Admin panel pages
+        ├── components/        # Header, Footer, SearchBar, MovieCard, etc.
+        ├── lib/                # axios client, TanStack Query hooks, helpers
+        ├── context/            # CityContext (selected city, persisted)
+        └── types.ts            # Shared TypeScript interfaces
+</code></pre>
+
+<h3>Backend package responsibilities</h3>
+<table>
+<tr><th>Package</th><th>Responsibility</th></tr>
+<tr><td><code>catalog</code></td><td>Core domain: cities, venues, screens, seats, movies, shows, and per-show seat inventory (<code>ShowSeat</code>). Owns the public browse API (<code>CatalogController</code>) and search.</td></tr>
+<tr><td><code>user</code></td><td><code>AppUser</code> entity synced from Clerk JWT claims on first authenticated request; bootstrap-admin-by-email mechanism.</td></tr>
+<tr><td><code>security</code></td><td><code>SecurityConfig</code> wires the OAuth2 resource server (JWT validation against Clerk's JWKS) and route authorization rules; <code>ClerkJwtAuthenticationConverter</code> enriches the authenticated principal with <code>ROLE_ADMIN</code> by looking up the DB.</td></tr>
+<tr><td><code>admin</code></td><td>CRUD endpoints for movies, venues, screens, and shows, gated by <code>ROLE_ADMIN</code>. Screen creation auto-generates the seat map; show creation auto-generates <code>ShowSeat</code> inventory.</td></tr>
+<tr><td><code>booking</code></td><td>The seat-selection → hold → confirm flow. <code>SeatLockService</code> wraps Redis; <code>BookingService</code> owns the transactional DB writes; <code>SeatMapService</code> serves the public seat map.</td></tr>
+<tr><td><code>event</code></td><td>Minimal read-only events feature (city-filtered, no booking yet).</td></tr>
+<tr><td><code>cache</code></td><td>Custom Redis cache configuration using per-cache explicitly-typed Jackson serializers (see §6).</td></tr>
+</table>
+
+<h3>Frontend structure</h3>
+<table>
+<tr><th>Path</th><th>Responsibility</th></tr>
+<tr><td><code>lib/api.ts</code></td><td>Shared axios instance, baseURL <code>/api</code> (proxied to backend by Vite in dev).</td></tr>
+<tr><td><code>lib/useAuthTokenInjector.ts</code></td><td>Hook that attaches the Clerk session JWT to every outgoing axios request via an interceptor.</td></tr>
+<tr><td><code>lib/queries.ts</code>, <code>adminQueries.ts</code>, <code>bookingQueries.ts</code></td><td>TanStack Query hooks grouped by domain (public browse, admin CRUD, booking).</td></tr>
+<tr><td><code>context/CityContext.tsx</code></td><td>Selected city, persisted to <code>localStorage</code>, with geolocation-based auto-detect on first visit.</td></tr>
+<tr><td><code>pages/</code></td><td>One component per route: Home, MovieDetail, SeatSelection, Events, ComingSoon (Plays/Sports/Activities), Admin/*.</td></tr>
+</table>
+</div>
+
+<!-- 3. SCHEMA -->
+<div class="section" id="schema">
+<h2>3. Database Schema</h2>
+
+<div class="diagram">
+<pre><code>city ──1:N── venue ──1:N── screen ──1:N── seat
+                                  │            │
+                                  │            │
+movie ──1:N── showtime ──────────┘            │
+                  │                            │
+                  └──────1:N── show_seat ──────┘
+                                  │
+                                  └──1:1── booking_seat ──N:1── booking ──N:1── app_user
+
+event ──N:1── city   (independent, no booking yet)
+</code></pre>
+</div>
+
+<p><strong>Note on naming:</strong> the show table is called <code>showtime</code>, not <code>show</code> — <code>SHOW</code> is a reserved word in MySQL and would require escaping in every query. Renaming avoided that entirely (the JPA entity class is still named <code>Show</code>; only the physical table name changed via <code>@Table(name = "showtime")</code>).</p>
+
+<h3>Catalog tables</h3>
+<table>
+<tr><th>Table</th><th>Key columns</th><th>Purpose</th></tr>
+<tr><td><code>city</code></td><td>name, state, slug, latitude, longitude</td><td>10 seeded cities. Lat/lng used for geolocation-based auto-selection on the frontend.</td></tr>
+<tr><td><code>venue</code></td><td>city_id (FK), name, address, slug</td><td>Cinema/mall. 35 seeded (3–4 per city, real chain names: PVR, INOX, Cinepolis, etc.)</td></tr>
+<tr><td><code>screen</code></td><td>venue_id (FK), name</td><td>Auditorium within a venue. 2 per venue (70 total).</td></tr>
+<tr><td><code>seat</code></td><td>screen_id (FK), row_label, seat_number, seat_type</td><td>Static physical seat map. 114 seats/screen: rows A–C Regular, D–G Premium, H–I Recliner.</td></tr>
+<tr><td><code>movie</code></td><td>title, slug, duration_minutes, language, genre, release_date, poster_url, trailer_url, censor_rating</td><td>8 seeded movies (real, openly-licensed short films used as trailer content — see §9).</td></tr>
+<tr><td><code>showtime</code></td><td>movie_id (FK), screen_id (FK), start_time, end_time, base_price</td><td>A movie playing on a specific screen at a specific time. 2,240 seeded (8 movies × 70 screens × 2 days × 2 slots).</td></tr>
+<tr><td><code>show_seat</code></td><td>show_id (FK), seat_id (FK), price, status</td><td>Bookable inventory — one row per seat per showtime. status ∈ AVAILABLE / BOOKED (LOCKED is Redis-only, see §5). ~255K rows seeded.</td></tr>
+</table>
+
+<h3>User &amp; booking tables</h3>
+<table>
+<tr><th>Table</th><th>Key columns</th><th>Purpose</th></tr>
+<tr><td><code>app_user</code></td><td>clerk_user_id (unique), email, name, is_admin</td><td>Synced lazily from the Clerk JWT on first authenticated request.</td></tr>
+<tr><td><code>booking</code></td><td>booking_reference (unique), user_id (FK), show_id (FK), status, total_amount</td><td>One row per confirmed booking. status is CONFIRMED in the current mock-payment flow.</td></tr>
+<tr><td><code>booking_seat</code></td><td>booking_id (FK), show_seat_id (FK, unique), price</td><td>Line items of a booking. Unique constraint on show_seat_id prevents the same seat being booked twice at the DB level, as a second line of defense behind the Redis lock.</td></tr>
+</table>
+
+<h3>Events table</h3>
+<table>
+<tr><th>Table</th><th>Key columns</th><th>Purpose</th></tr>
+<tr><td><code>event</code></td><td>city_id (FK), title, category, venue_name (free text), event_date, price, image_url</td><td>Browsable only — no seat/booking model yet. 10 seeded across cities.</td></tr>
+</table>
+</div>
+
+<!-- 4. AUTH FLOW -->
+<div class="section" id="auth-flow">
+<h2>4. Authentication &amp; Authorization Flow</h2>
+
+<div class="diagram">
+<div class="flow-step"><span class="flow-num">1</span> User clicks "Sign in" → Clerk's hosted modal handles sign-up/sign-in (frontend only, via <code>@clerk/clerk-react</code>).</div>
+<div class="flow-step"><span class="flow-num">2</span> Clerk issues a session JWT. <code>useAuthTokenInjector</code> attaches it as <code>Authorization: Bearer &lt;token&gt;</code> on every axios request.</div>
+<div class="flow-step"><span class="flow-num">3</span> Spring Security's OAuth2 resource server validates the JWT against Clerk's JWKS (fetched from <code>{CLERK_ISSUER}/.well-known/openid-configuration</code>), lazily and cached.</div>
+<div class="flow-step"><span class="flow-num">4</span> <code>ClerkJwtAuthenticationConverter</code> runs on every authenticated request: looks up <code>app_user</code> by the JWT's <code>sub</code> claim, and if <code>is_admin = true</code>, grants the <code>ROLE_ADMIN</code> authority.</div>
+<div class="flow-step"><span class="flow-num">5</span> On endpoints that need a persisted user (e.g. <code>/api/me</code>, booking confirm), <code>UserSyncService.syncFromJwt()</code> creates or updates the <code>app_user</code> row from the JWT's <code>sub</code>/<code>email</code>/<code>name</code> claims.</div>
+<div class="flow-step"><span class="flow-num">6</span> <strong>Bootstrap admins:</strong> the <code>ADMIN_EMAILS</code> env var (comma-separated) is checked on every sync — any matching email is auto-promoted to admin, even on a fresh database. No manual SQL needed.</div>
+</div>
+
+<h3>Route authorization rules (SecurityConfig)</h3>
+<table>
+<tr><th>Pattern</th><th>Rule</th></tr>
+<tr><td><code>/api/public/**</code></td><td>Open, no auth required</td></tr>
+<tr><td><code>/api/admin/**</code></td><td>Requires <code>ROLE_ADMIN</code></td></tr>
+<tr><td>Everything else (<code>/api/me</code>, <code>/api/bookings/**</code>)</td><td>Requires any authenticated user</td></tr>
+</table>
+
+<p><strong>Important Clerk configuration:</strong> the JWT's default claims don't include email/name. A custom session token template must be configured in the Clerk dashboard (Configure → Sessions → Customize session token) with:</p>
+<pre><code>{ "email": "{{user.primary_email_address}}", "name": "{{user.full_name}}" }</code></pre>
+</div>
+
+<!-- 5. BOOKING FLOW -->
+<div class="section" id="booking-flow">
+<h2>5. Booking &amp; Seat-Locking Flow</h2>
+
+<p>The seat map is public (no auth needed to view). Holding and confirming seats requires authentication. Redis is the source of truth for temporary holds — the database's <code>show_seat.status</code> only ever transitions <code>AVAILABLE → BOOKED</code>, never to an intermediate "locked" state, which avoids needing a background cleanup job for expired holds (Redis TTL handles that automatically).</p>
+
+<div class="diagram">
+<div class="flow-step"><span class="flow-num">1</span> <strong>View seat map</strong> — <code>GET /api/public/shows/{id}/seat-map</code>. For each seat: DB status BOOKED → shown as booked; else Redis key <code>seatlock:{showSeatId}</code> exists → shown as locked; else available.</div>
+<div class="flow-step"><span class="flow-num">2</span> <strong>Select seats</strong> — client-side only, no server call yet.</div>
+<div class="flow-step"><span class="flow-num">3</span> <strong>Hold</strong> — <code>POST /api/bookings/hold {showId, showSeatIds}</code>. For each seat, <code>SETNX seatlock:{id} = holdId</code> with a 5-minute TTL. If <em>any</em> seat is already locked, the whole request fails with 409 and any locks acquired so far in that request are rolled back. On success, hold metadata (user, show, seats, total) is stored as JSON under <code>hold:{holdId}</code>, same TTL.</div>
+<div class="flow-step"><span class="flow-num">4</span> <strong>Pay</strong> — currently a mock: clicking "Pay &amp; Confirm" calls confirm directly with no real payment gateway (see §11 — Stripe keys were never supplied).</div>
+<div class="flow-step"><span class="flow-num">5</span> <strong>Confirm</strong> — <code>POST /api/bookings/confirm {holdId}</code>. Validates: hold exists, belongs to the caller, and every seat's lock still points to this <code>holdId</code> (defends against a lock expiring mid-flow). Then, in one DB transaction: creates the <code>Booking</code> row, one <code>BookingSeat</code> row per seat, flips every <code>ShowSeat.status</code> to <code>BOOKED</code>, and finally deletes the Redis lock keys.</div>
+</div>
+
+<h3>Why Redis SETNX and not a DB row lock?</h3>
+<p>Using Redis avoids two problems a DB-only design would have: (a) a hold that's never confirmed (user closes the tab) would leave seats stuck in a "locked" state forever without a cleanup job, and (b) checking-then-setting seat status in the DB under concurrent requests needs pessimistic locking or careful transaction isolation to avoid a race where two users both see a seat as available. Redis's <code>SETNX ... EX</code> is atomic and self-expiring, which sidesteps both.</p>
+</div>
+
+<!-- 6. CACHING -->
+<div class="section" id="caching">
+<h2>6. Caching Strategy</h2>
+<p>Two hot, read-heavy, rarely-changing public endpoints are cached in Redis via Spring's <code>@Cacheable</code>: the city list (<code>cities</code> cache) and "movies playing in city X" (<code>moviesByCity</code> cache, keyed by city ID). TTL is 5 minutes. Cache is evicted (<code>@CacheEvict(allEntries = true)</code>) whenever an admin creates/updates/deletes a movie, or creates a show — either could change what's "now showing" in a city.</p>
+
+<div class="fixed">
+<strong>Bug found &amp; fixed:</strong> Spring Boot's default Redis cache serializer (<code>GenericJacksonJsonRedisSerializer</code>) loses the element type of generic collections like <code>List&lt;CityResponse&gt;</code> on deserialize — Jackson has no way to know the target type from a cache lookup alone, so it falls back to <code>List&lt;LinkedHashMap&gt;</code>. This threw <code>HttpMessageNotWritableException</code> when serving a cache hit, which — critically — doesn't surface as a 500. Spring's error-handling re-dispatches to <code>/error</code> internally, which isn't covered by the <code>/api/public/**</code> permit-all rule, so it fell through to "authentication required" and returned a misleading <strong>401</strong> instead. Fixed by registering a per-cache-name <code>RedisCacheConfiguration</code> with an explicitly-typed <code>JacksonJsonRedisSerializer</code> (concrete <code>JavaType</code> per cache, no generic type erasure possible). See <code>cache/CacheConfig.java</code>.</div>
+
+<p>This project runs on a very recent Spring Boot 4 / Jackson 3 stack, where Jackson's Maven coordinates moved from <code>com.fasterxml.jackson.*</code> to <code>tools.jackson.*</code>. Spring Data Redis's classic <code>GenericJackson2JsonRedisSerializer</code> (the "2" suffix) is hardcoded to the old Jackson 2 API and isn't on the classpath at all in this stack — the Jackson-3-compatible replacement is <code>GenericJacksonJsonRedisSerializer</code> (no "2"). This is worth knowing if the Jackson/Redis dependency versions ever get bumped again.</p>
+</div>
+
+<!-- 7. API REFERENCE -->
+<div class="section" id="api-reference">
+<h2>7. API Reference</h2>
+
+<h3>Public — Catalog &amp; Search</h3>
+<table>
+<tr><th>Endpoint</th><th>Description</th></tr>
+<tr><td><span class="badge-method get">GET</span> <code>/api/public/cities</code></td><td>All cities (cached)</td></tr>
+<tr><td><span class="badge-method get">GET</span> <code>/api/public/movies?cityId=</code></td><td>Movies with an upcoming show in the given city (cached)</td></tr>
+<tr><td><span class="badge-method get">GET</span> <code>/api/public/movies/{id}</code></td><td>Movie detail incl. trailer URL</td></tr>
+<tr><td><span class="badge-method get">GET</span> <code>/api/public/movies/{id}/shows?cityId=&amp;date=</code></td><td>Showtimes for a movie in a city on a date, grouped by venue on the client</td></tr>
+<tr><td><span class="badge-method get">GET</span> <code>/api/public/events?cityId=</code></td><td>Curated events, optionally filtered by city</td></tr>
+<tr><td><span class="badge-method get">GET</span> <code>/api/public/search?q=</code></td><td>Combined movie-title and venue-name search</td></tr>
+<tr><td><span class="badge-method get">GET</span> <code>/api/public/health</code></td><td>Liveness check</td></tr>
+</table>
+
+<h3>Public — Seat Map</h3>
+<table>
+<tr><th>Endpoint</th><th>Description</th></tr>
+<tr><td><span class="badge-method get">GET</span> <code>/api/public/shows/{showId}/seat-map</code></td><td>Full seat layout for a show with live AVAILABLE/LOCKED/BOOKED status</td></tr>
+</table>
+
+<h3>Authenticated — Me &amp; Bookings</h3>
+<table>
+<tr><th>Endpoint</th><th>Description</th></tr>
+<tr><td><span class="badge-method get">GET</span> <code>/api/me</code></td><td>Current user profile (syncs from JWT if first call), incl. <code>isAdmin</code></td></tr>
+<tr><td><span class="badge-method post">POST</span> <code>/api/bookings/hold</code></td><td>Acquire a 5-minute Redis lock on selected seats</td></tr>
+<tr><td><span class="badge-method post">POST</span> <code>/api/bookings/confirm</code></td><td>Finalize a hold into a real booking</td></tr>
+<tr><td><span class="badge-method get">GET</span> <code>/api/bookings/{reference}</code></td><td>Fetch one booking (owner only)</td></tr>
+<tr><td><span class="badge-method get">GET</span> <code>/api/bookings</code></td><td>List the current user's bookings</td></tr>
+</table>
+
+<h3>Admin — requires ROLE_ADMIN</h3>
+<table>
+<tr><th>Endpoint</th><th>Description</th></tr>
+<tr><td><span class="badge-method get">GET</span> <code>/api/admin/movies</code></td><td>Paginated movie list (<code>?page=&amp;size=</code>)</td></tr>
+<tr><td><span class="badge-method post">POST</span> <code>/api/admin/movies</code></td><td>Create a movie</td></tr>
+<tr><td><span class="badge-method put">PUT</span> <code>/api/admin/movies/{id}</code></td><td>Update a movie</td></tr>
+<tr><td><span class="badge-method delete">DELETE</span> <code>/api/admin/movies/{id}</code></td><td>Delete a movie</td></tr>
+<tr><td><span class="badge-method get">GET</span> / <span class="badge-method post">POST</span> <code>/api/admin/venues</code></td><td>Paginated list / create a venue</td></tr>
+<tr><td><span class="badge-method get">GET</span> / <span class="badge-method post">POST</span> <code>/api/admin/venues/{venueId}/screens</code></td><td>List / create a screen (auto-generates its 114-seat layout)</td></tr>
+<tr><td><span class="badge-method get">GET</span> / <span class="badge-method post">POST</span> <code>/api/admin/shows</code></td><td>Paginated list / create a showtime (auto-generates its <code>show_seat</code> inventory)</td></tr>
+</table>
+</div>
+
+<!-- 8. FRONTEND FLOW -->
+<div class="section" id="frontend-flow">
+<h2>8. Frontend Data Flow</h2>
+
+<h3>Routing table</h3>
+<table>
+<tr><th>Path</th><th>Component</th></tr>
+<tr><td><code>/</code></td><td>HomePage — banner carousel, "now showing" grid, trending events strip</td></tr>
+<tr><td><code>/movies/:movieId</code></td><td>MovieDetailPage — trailer modal, date tabs, showtimes by venue</td></tr>
+<tr><td><code>/shows/:showId</code></td><td>SeatSelectionPage — seat map, hold, mock pay, confirmation</td></tr>
+<tr><td><code>/events</code></td><td>EventsPage — real, city-filtered event cards</td></tr>
+<tr><td><code>/plays</code>, <code>/sports</code>, <code>/activities</code></td><td>ComingSoonPage (shared placeholder component)</td></tr>
+<tr><td><code>/admin/*</code></td><td>AdminLayout + nested tabs (movies/venues/screens/shows), gated client-side by <code>me.isAdmin</code></td></tr>
+</table>
+
+<h3>State management patterns</h3>
+<ul style="font-size:12.5px; line-height:1.7;">
+<li><strong>Server state:</strong> entirely TanStack Query. Every domain has its own hooks file (<code>queries.ts</code> for public browse, <code>adminQueries.ts</code>, <code>bookingQueries.ts</code>). Mutations invalidate the relevant query keys on success rather than manually patching cache.</li>
+<li><strong>Selected city:</strong> <code>CityContext</code>, persisted to <code>localStorage</code> under <code>showszn.selectedCityId</code>. On first visit with no stored preference, <code>CitySelector</code> tries <code>navigator.geolocation</code> and picks the nearest seeded city via Haversine distance (<code>lib/geo.ts</code>); falls back to the first city if denied or unsupported.</li>
+<li><strong>Auth token:</strong> <code>useAuthTokenInjector</code> is called once near the app root; it registers an axios request interceptor that calls Clerk's <code>getToken()</code> and attaches it as a Bearer header on every request (harmless no-op on public endpoints).</li>
+<li><strong>Pagination:</strong> admin list pages carry their own <code>page</code> state and read Spring's <code>Page&lt;T&gt;</code> response shape (<code>content</code>, <code>totalPages</code>, etc.) via a shared <code>Pagination</code> component. Dropdowns that need the <em>full</em> list (e.g. picking a venue when creating a show) use separate <code>useAllAdminVenues</code>/<code>useAllAdminMovies</code> hooks that request a large page size rather than reusing the paginated hook.</li>
+</ul>
+</div>
+
+<!-- 9. CHANGELOG -->
+<div class="section" id="changelog">
+<h2>9. Build Log: Decisions &amp; Bugs Fixed</h2>
+<p>In build order. Each entry is a real issue hit during development, not a hypothetical.</p>
+
+<h3>Movie &amp; trailer catalog</h3>
+<p>The movie catalog uses real, verified, openly-licensed short films (Blender Foundation / Blender Studio open movies) as trailer content, since fictional movies can't have real trailers. Each was verified via YouTube's oEmbed API before use — title, author, and license confirmed, not guessed.</p>
+<table>
+<tr><th>Movie</th><th>Genre</th><th>Trailer source</th></tr>
+<tr><td>Big Buck Bunny</td><td>Comedy</td><td>Blender Foundation</td></tr>
+<tr><td>Sintel</td><td>Fantasy</td><td>Blender Foundation</td></tr>
+<tr><td>Tears of Steel</td><td>Sci-Fi</td><td>Blender Foundation</td></tr>
+<tr><td>Cosmos Laundromat</td><td>Sci-Fi Comedy</td><td>Blender Foundation</td></tr>
+<tr><td>Spring</td><td>Fantasy</td><td>Blender Studio</td></tr>
+<tr><td>Elephants Dream</td><td>Sci-Fi</td><td>Blender Foundation (the first-ever open movie)</td></tr>
+<tr><td>Caminandes: Llama Drama</td><td>Comedy</td><td>Blender Foundation (CC BY 3.0 reupload)</td></tr>
+<tr><td>Charge</td><td>Action</td><td>Blender Studio</td></tr>
+</table>
+<div class="note">Earlier in development, movies had fictional titles paired arbitrarily with these trailers (e.g. a Hindi thriller playing a cute rabbit comedy). This was corrected by renaming every movie to match what its trailer actually shows — not a data bug, a content design fix.</div>
+
+<h3>Recurring bug pattern: lazy-loaded associations masked as 401</h3>
+<div class="fixed">Found <strong>three separate times</strong> in different services (catalog shows, admin venues, admin shows): accessing a lazily-fetched JPA association (e.g. <code>show.getScreen().getVenue().getName()</code>) outside an open Hibernate session throws <code>LazyInitializationException</code>. Because this happens during JSON response serialization — after the controller method has already returned — Spring's error-dispatch mechanism re-enters the servlet pipeline via <code>/error</code>, which isn't covered by the security config's permit-all rule, so it returns <strong>401 Unauthorized</strong> instead of a 500. This is deeply misleading: it looks like an auth bug when it's actually a data-access bug. <br><br><strong>Fix pattern used throughout:</strong> add <code>JOIN FETCH</code> to the repository query so every association the DTO mapper touches is loaded in the same query, eliminating the lazy proxy entirely rather than trying to keep the transaction open longer.</div>
+
+<h3>MySQL migration</h3>
+<table>
+<tr><th>Issue</th><th>Fix</th></tr>
+<tr><td><code>SHOW</code> is a MySQL reserved word</td><td>Renamed the table to <code>showtime</code> (entity class stays <code>Show</code>, only <code>@Table(name=...)</code> changed)</td></tr>
+<tr><td>No <code>generate_series()</code> in MySQL</td><td>Used <code>WITH RECURSIVE</code> CTEs for seat-number generation</td></tr>
+<tr><td><code>WITH RECURSIVE ... INSERT INTO ...</code> syntax error</td><td>MySQL requires the CTE <em>after</em> <code>INSERT INTO table (cols)</code>, not before the whole statement (unlike leading a plain <code>SELECT</code>)</td></tr>
+<tr><td>Stale target/classes resources</td><td>Old Postgres-syntax migration files were still copied into <code>target/classes</code> after being deleted from source — required <code>mvn clean</code>, not just <code>compile</code></td></tr>
+<tr><td>Failed migration left Flyway's schema history dirty</td><td>Dropped and recreated the schema rather than attempting <code>flyway repair</code> (acceptable since there was no real user data yet)</td></tr>
+</table>
+
+<h3>Redis / Jackson 3</h3>
+<p>See §6 for the full explanation — <code>GenericJackson2JsonRedisSerializer</code> doesn't exist on this stack's classpath (Jackson 3, not 2); its replacement is <code>GenericJacksonJsonRedisSerializer</code>, and it needs an explicit <code>JavaType</code> per cache to avoid generic-collection type loss on deserialize.</p>
+
+<h3>Scaffolding-era fixes</h3>
+<table>
+<tr><th>Issue</th><th>Fix</th></tr>
+<tr><td>Spring Boot parent version <code>4.1.0.RELEASE</code> not found</td><td>Spring Boot 3+ dropped the <code>.RELEASE</code> suffix from version strings; correct version was <code>4.1.0</code></td></tr>
+<tr><td>Docker MySQL 8.4 wouldn't start with <code>--default-authentication-plugin</code> flag</td><td>That flag was removed in MySQL 8.4 (modern connectors support <code>caching_sha2_password</code> natively) — dropped it from <code>docker-compose.yml</code></td></tr>
+</table>
+</div>
+
+<!-- 10. SETUP -->
+<div class="section" id="setup">
+<h2>10. Environment &amp; Setup</h2>
+
+<h3>Required environment variables (backend/.env)</h3>
+<table>
+<tr><th>Variable</th><th>Purpose</th></tr>
+<tr><td><code>CLERK_ISSUER</code></td><td>Clerk Frontend API URL, e.g. <code>https://your-app.clerk.accounts.dev</code> — used as the JWT issuer for validation</td></tr>
+<tr><td><code>ADMIN_EMAILS</code></td><td>Comma-separated emails auto-promoted to admin on sign-in</td></tr>
+<tr><td><code>STRIPE_SECRET_KEY</code> / <code>STRIPE_WEBHOOK_SECRET</code></td><td>Placeholder — not yet wired up (see §11)</td></tr>
+</table>
+
+<h3>Required environment variables (frontend/.env)</h3>
+<table>
+<tr><th>Variable</th><th>Purpose</th></tr>
+<tr><td><code>VITE_CLERK_PUBLISHABLE_KEY</code></td><td>Clerk publishable key (safe to expose client-side)</td></tr>
+</table>
+
+<h3>Local run</h3>
+<pre><code># 1. Start MySQL + Redis
+docker compose up -d
+
+# 2. Backend (runs Flyway migrations automatically on boot)
+cd backend
+./mvnw spring-boot:run
+
+# 3. Frontend
+cd frontend
+npm install
+npm run dev</code></pre>
+<p>Frontend dev server: <code>http://localhost:5173</code> (Vite proxies <code>/api</code> to the backend on <code>:8080</code>). Backend: <code>http://localhost:8080</code>. MySQL: <code>localhost:3306</code>. Redis: <code>localhost:6379</code>.</p>
+</div>
+
+<!-- 11. LIMITATIONS -->
+<div class="section" id="limitations">
+<h2>11. Known Limitations &amp; Next Steps</h2>
+
+<div class="limitation"><strong>Payment is mocked.</strong> No Stripe keys have been supplied, so <code>POST /api/bookings/confirm</code> finalizes the booking immediately with no real charge. Wiring real Stripe would mean: creating a PaymentIntent during hold, confirming it client-side, and only finalizing the booking from a webhook (not the client) so a browser closing mid-payment can't create a booking without a successful charge.</div>
+
+<div class="limitation"><strong>Plays, Sports, and Activities are placeholder pages.</strong> Building these out fully would mean replicating the entire catalog + booking domain (venue/screen-equivalent, seat-or-ticket inventory, its own admin CRUD) for each category — a significant scope expansion intentionally deferred.</div>
+
+<div class="limitation"><strong>Events are browsable only.</strong> No seat/ticket booking model exists for events yet — the <code>event</code> table has no relationship to <code>booking</code>.</div>
+
+<div class="limitation"><strong>Public movie listing isn't paginated.</strong> Only admin list endpoints (movies/venues/shows) are paginated. The public "now showing" list is naturally bounded per city today, but would need pagination if the catalog grows much larger.</div>
+
+<div class="limitation"><strong>No automated tests.</strong> All verification in this build was done via manual <code>curl</code> checks, compile/boot checks, and browser testing by the user. There is no test suite (unit, integration, or e2e) yet.</div>
+
+<h3>Suggested next steps, roughly in priority order</h3>
+<ol style="font-size:12.5px; line-height:1.8;">
+<li>Wire real Stripe payments (webhook-driven confirmation, not client-driven)</li>
+<li>Add a "My Bookings" page on the frontend (the backend endpoint <code>GET /api/bookings</code> already exists and is unused by the UI)</li>
+<li>Add automated tests, starting with the seat-lock concurrency logic (highest-risk correctness surface)</li>
+<li>Add booking cancellation/refund flow</li>
+<li>Consider a background job to expire stale <code>PENDING</code> bookings if the payment step becomes asynchronous</li>
+</ol>
+</div>
+
+<div class="footer-note">ShowSzn Technical Documentation — generated to capture the state of the project as built in this session.</div>
+
+</body>
+</html>
